@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: web-editor
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/webeditor
+    username: ${DB_USERNAME:webeditor}
+    password: ${DB_PASSWORD:webeditor}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+jwt:
+  secret: ${JWT_SECRET:your-256-bit-secret-key-change-this-in-production-minimum-32-characters-required}
+  expiration: 86400000  # 24 hours in milliseconds
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+logging:
+  level:
+    com.webeditor: DEBUG
+    org.springframework.security: DEBUG
