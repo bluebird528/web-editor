@@ -98,3 +98,58 @@ spotbugsTest {
         }
     }
 }
+
+// Git hooks 설치 task
+task installGitHooks(type: Copy) {
+    description = 'Git hooks를 .git/hooks 디렉토리에 설치합니다.'
+    group = 'git'
+
+    from "${rootDir}/scripts/git-hooks"
+    into "${rootDir}/.git/hooks"
+    fileMode = 0755
+}
+
+// Git 커밋 메시지 템플릿 설정 task
+task configureGitTemplate(type: Exec) {
+    description = 'Git 커밋 메시지 템플릿을 설정합니다.'
+    group = 'git'
+
+    commandLine 'git', 'config', 'commit.template', '.gitmessage'
+
+    doLast {
+        println 'Git 커밋 메시지 템플릿이 설정되었습니다.'
+    }
+}
+
+// Git hooks 초기화 task (hooks 설치 + 템플릿 설정)
+task setupGitHooks {
+    description = 'Git hooks와 커밋 메시지 템플릿을 초기화합니다.'
+    group = 'git'
+
+    dependsOn installGitHooks, configureGitTemplate
+
+    doLast {
+        println ''
+        println '========================================='
+        println 'Git 커밋 메시지 자동화 설정 완료'
+        println '========================================='
+        println ''
+        println '설치된 항목:'
+        println '  - prepare-commit-msg hook (커밋 메시지 템플릿 자동 적용)'
+        println '  - commit-msg hook (Conventional Commits 형식 검증)'
+        println '  - .gitmessage 템플릿'
+        println ''
+        println '사용 방법:'
+        println '  1. git commit 실행 시 자동으로 템플릿이 적용됩니다.'
+        println '  2. Conventional Commits 형식을 따라 작성하세요.'
+        println '     형식: <type>(<scope>): <subject>'
+        println ''
+        println '예시:'
+        println '  feat(auth): JWT 토큰 갱신 기능 추가'
+        println '  fix(content): 내용 업데이트 시 NPE 수정'
+        println '========================================='
+    }
+}
+
+// 빌드 시 자동으로 Git hooks 설치 (선택사항)
+// build.dependsOn setupGitHooks

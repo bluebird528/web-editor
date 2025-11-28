@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# prepare-commit-msg hook
+# 커밋 메시지 작성 시 템플릿을 자동으로 로드합니다.
+#
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# merge, squash 등의 경우 템플릿을 적용하지 않음
+if [ -n "$COMMIT_SOURCE" ]; then
+    exit 0
+fi
+
+# 커밋 메시지 파일이 비어있거나 기본 메시지만 있는 경우 템플릿 적용
+if [ ! -s "$COMMIT_MSG_FILE" ] || grep -q "^# Please enter the commit message" "$COMMIT_MSG_FILE"; then
+    # 기존 내용 백업
+    EXISTING_MSG=$(cat "$COMMIT_MSG_FILE" | grep -v "^#" | grep -v "^$")
+
+    # 템플릿 적용
+    if [ -f ".gitmessage" ]; then
+        cat .gitmessage > "$COMMIT_MSG_FILE"
+
+        # 기존 메시지가 있으면 템플릿 위에 추가
+        if [ -n "$EXISTING_MSG" ]; then
+            echo "$EXISTING_MSG" | cat - "$COMMIT_MSG_FILE" > temp && mv temp "$COMMIT_MSG_FILE"
+        fi
+    fi
+fi
+
+exit 0

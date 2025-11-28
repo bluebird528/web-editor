@@ -53,6 +53,32 @@ Application will start on `http://localhost:8080`
 ./gradlew spotbugsMain spotbugsTest
 ```
 
+### Git Commit Message Automation
+```bash
+# Setup Git hooks and commit message template (one-time setup)
+./gradlew setupGitHooks
+```
+
+This project uses **Conventional Commits** format for commit messages:
+- `feat(scope): description` - New features
+- `fix(scope): description` - Bug fixes
+- `refactor(scope): description` - Code refactoring
+- `docs(scope): description` - Documentation updates
+- `test(scope): description` - Test additions/updates
+- `chore(scope): description` - Build/config changes
+
+The Git hooks will:
+- Automatically load commit message template when committing
+- Validate commit messages follow Conventional Commits format
+- Enforce subject line length limits (72 chars max, 50 recommended)
+
+Example commit messages:
+```bash
+git commit -m "feat(auth): add JWT token refresh functionality"
+git commit -m "fix(content): resolve NPE in content update"
+git commit -m "docs: update README with setup instructions"
+```
+
 ## API Documentation
 
 Access Swagger UI at: `http://localhost:8080/swagger-ui.html`
