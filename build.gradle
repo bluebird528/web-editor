@@ -73,8 +73,8 @@ checkstyleTest {
 spotbugs {
     ignoreFailures = false
     showProgress = true
-    effort = com.github.spotbugs.snom.Effort.MAX
-    reportLevel = com.github.spotbugs.snom.ReportLevel.MEDIUM
+    effort = 'max'
+    reportLevel = 'medium'
 }
 
 spotbugsMain {
