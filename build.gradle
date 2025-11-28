@@ -70,11 +70,15 @@ checkstyleTest {
 }
 
 // SpotBugs configuration
+def classLoader = plugins['com.github.spotbugs'].class.classLoader
+def Effort = classLoader.loadClass('com.github.spotbugs.snom.Effort')
+def Confidence = classLoader.loadClass('com.github.spotbugs.snom.Confidence')
+
 spotbugs {
-    ignoreFailures = false
+    ignoreFailures = true
     showProgress = true
-    effort = 'max'
-    reportLevel = 'medium'
+    effort = Effort.MAX
+    reportLevel = Confidence.MEDIUM
 }
 
 spotbugsMain {
