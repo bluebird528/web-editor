@@ -74,3 +74,4 @@ application-local.properties
 # Database
 *.db
 *.sqlite
+/claude.md
