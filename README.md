@@ -123,16 +123,35 @@ This project uses **Conventional Commits** format for commit messages:
 - `chore(scope): description` - Build/config changes
 
 The Git hooks will:
-- Automatically load commit message template when committing
+- **Automatically generate commit messages** based on file changes
+- Analyze staged files to suggest appropriate type, scope, and subject
+- Load commit message template when committing
 - Validate commit messages follow Conventional Commits format
 - Enforce subject line length limits (72 chars max, 50 recommended)
 
-Example commit messages:
+When you run `git commit`, the hook will:
+1. Analyze your staged changes
+2. Auto-generate a Conventional Commits message
+3. Open your editor with the suggested message
+4. You can edit, approve, or rewrite the message
+
+Example workflow:
 ```bash
+# Stage your changes
+git add src/main/java/com/webeditor/api/controller/AuthController.java
+
+# Run commit (auto-generated message will appear in editor)
+git commit
+
+# Or provide custom message
 git commit -m "feat(auth): add JWT token refresh functionality"
-git commit -m "fix(content): resolve NPE in content update"
-git commit -m "docs: update README with setup instructions"
 ```
+
+Auto-generated message examples:
+- Adding Docker files → `chore(docker): add Docker PostgreSQL configuration`
+- Modifying controllers → `feat(api): update API endpoints`
+- Updating README → `docs: update documentation`
+- Fixing bugs → `fix(service): resolve NPE in business logic`
 
 ## API Documentation
 
