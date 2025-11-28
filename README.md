@@ -18,10 +18,38 @@ RESTful API for content management system with JWT authentication, built with Sp
 
 ### Prerequisites
 - Java 17+
-- PostgreSQL 12+
+- Docker & Docker Compose (recommended) OR PostgreSQL 12+
 - Gradle 8.5+ (or use included wrapper)
 
 ### Database Setup
+
+#### Option 1: Using Docker (Recommended)
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Start PostgreSQL container
+docker-compose up -d postgres
+
+# Verify database is running
+docker-compose ps
+
+# View database logs
+docker-compose logs -f postgres
+```
+
+PostgreSQL will be available at `localhost:5432` with:
+- Database: `webeditor`
+- Username: `webeditor`
+- Password: `webeditor`
+
+Optional: Start pgAdmin for database management
+```bash
+docker-compose up -d pgadmin
+```
+Access pgAdmin at `http://localhost:5050` (Email: admin@webeditor.com / Password: admin)
+
+#### Option 2: Local PostgreSQL Installation
 ```bash
 createdb webeditor
 psql webeditor -c "CREATE USER webeditor WITH PASSWORD 'webeditor';"
@@ -42,6 +70,33 @@ Application will start on `http://localhost:8080`
 ### Run Tests
 ```bash
 ./gradlew test
+```
+
+### Docker Commands
+```bash
+# Start all services
+docker-compose up -d
+
+# Start only PostgreSQL
+docker-compose up -d postgres
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (WARNING: deletes all data)
+docker-compose down -v
+
+# View logs
+docker-compose logs -f
+
+# View PostgreSQL logs only
+docker-compose logs -f postgres
+
+# Restart PostgreSQL
+docker-compose restart postgres
+
+# Access PostgreSQL CLI
+docker-compose exec postgres psql -U webeditor -d webeditor
 ```
 
 ### Static Code Analysis
@@ -101,10 +156,41 @@ Access Swagger UI at: `http://localhost:8080/swagger-ui.html`
 
 ## Configuration
 
-Environment variables:
+### Environment Variables
+
+Application supports the following environment variables (see `.env.example`):
+
+**Database Configuration:**
+- `DB_HOST` - Database host (default: localhost)
+- `DB_PORT` - Database port (default: 5432)
+- `DB_NAME` - Database name (default: webeditor)
 - `DB_USERNAME` - Database username (default: webeditor)
 - `DB_PASSWORD` - Database password (default: webeditor)
+- `DB_POOL_SIZE` - Connection pool size (default: 10)
+
+**JPA Configuration:**
+- `JPA_DDL_AUTO` - Hibernate DDL mode (default: update)
+- `JPA_SHOW_SQL` - Show SQL queries (default: true)
+
+**Security:**
 - `JWT_SECRET` - JWT signing key (required, min 32 chars)
+
+**Docker PostgreSQL:**
+- `POSTGRES_DB` - PostgreSQL database name (default: webeditor)
+- `POSTGRES_USER` - PostgreSQL user (default: webeditor)
+- `POSTGRES_PASSWORD` - PostgreSQL password (default: webeditor)
+- `POSTGRES_PORT` - PostgreSQL port (default: 5432)
+
+**Docker pgAdmin (Optional):**
+- `PGADMIN_EMAIL` - pgAdmin login email (default: admin@webeditor.com)
+- `PGADMIN_PASSWORD` - pgAdmin password (default: admin)
+- `PGADMIN_PORT` - pgAdmin port (default: 5050)
+
+### Configuration Files
+
+- `application.yml` - Main application configuration
+- `.env` - Local environment variables (create from `.env.example`)
+- `docker-compose.yml` - Docker services configuration
 
 See `src/main/resources/application.yml` for more configuration options.
 

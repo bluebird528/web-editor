@@ -75,3 +75,11 @@ application-local.properties
 *.db
 *.sqlite
 /claude.md
+
+# Docker
+.env
+docker-compose.override.yml
+
+# PostgreSQL data
+postgres_data/
+pgadmin_data/
